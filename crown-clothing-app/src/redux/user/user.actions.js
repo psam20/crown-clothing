@@ -2,7 +2,7 @@
 
 // it will take user prop from firebase
 
-export const setCurrentUser= user => ({
+export const setcurrentUser= user => ({
         
     type : 'SET_CURRENT_USER',
     payload : user

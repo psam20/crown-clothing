@@ -1,5 +1,6 @@
 import React from 'react';
 import {Switch, Route} from 'react-router-dom';
+import {connect} from 'react-redux';
 import './App.css';
 import ShopPage from './pages/Shop/shop.component';
 
@@ -8,34 +9,37 @@ import HomePage from './pages/homepage/homepage.component';
 import Header from './Components/header-component/header.component';
 import SignInAndSignUp from './pages/signin-and-signup-page/signin-and-signup-page.component';
 import {auth,createUserProfileDocument} from './firebase/firebase.utils';
-
+import {setcurrentUser} from './redux/user/user.actions';
 
 class App extends React.Component {
-   
-  constructor(props){
-    super(props);
-    this.state={
-      currentUser : null
-    }
-  }
+ 
+  // we don't need this constructor anymore because we have mapDispatchtoProps function that
+  // sets currentUser property
+  // constructor(props){
+  //   super(props);
+  //   this.state={
+  //     currentUser : null
+  //   }
+  // }
   unsubscribeAuth=null;
   componentDidMount(){
+    const {setcurrentUser} =this.props;
     this.unsubscribeAuth=auth.onAuthStateChanged(async userAuth => {
 
       if(userAuth){
         const userRef=await createUserProfileDocument(userAuth);
 
         userRef.onSnapshot(snapshot => {
-          this.setState({
-            currentUser : {
+        
+            setcurrentUser ({
               id : snapshot.id,
               ...snapshot.data()
-            }
-          }, () => console.log(this.state))
-        })
+            });
+          });
+        
       }
   
-      this.setState({currentUser :userAuth})
+      setcurrentUser(userAuth)
 
       // console.log(user);
             
@@ -60,4 +64,16 @@ class App extends React.Component {
   }
 }
 
-export default App;
+// connect is HOC , FIRST ARGUEMENT IS mapStateToProps
+// first arguement we need if our app component need any state from reducer. 
+// We dont need any state form our reducer , so first arguement to connect HOC is null
+// Second Arguement to Connect HOC IS mapDispatchToProps
+// 
+// 
+
+const mapDispatchToProps=(dispatch) => ({
+  // setCurrentUser is an action function
+  setcurrentUser : user =>dispatch(setcurrentUser(user))
+})
+
+export default connect(null,mapDispatchToProps) (App);
