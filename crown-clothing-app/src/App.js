@@ -47,7 +47,8 @@ class App extends React.Component {
   render(){
     return (
       <div className="App">
-         <Header currentUser={this.state.currentUser}/>
+        {/* removed this from Header Component currentUser={this.state.currentUser} */}
+         <Header />
         <Switch>
           <Route exact path='/' component={HomePage}/>
           <Route  exact path='/shop' component={ShopPage}/>
