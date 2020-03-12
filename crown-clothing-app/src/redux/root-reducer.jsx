@@ -3,9 +3,10 @@ import {combineReducers} from 'redux';
 //function. It will call every child reducer, and gather their results into a single state 
 //object, whose keys correspond to the keys of the passed reducer functions.
 import userReducer from './user/user-reducer';
-
+import cartReducer from './cart/cart-reducer';
 
 export default combineReducers({
 
-    user : userReducer
+    user : userReducer,
+    cart :cartReducer
 });
